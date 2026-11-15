@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="description" content="استعراض تجريبي لمنصة مستويات الطلاب." />
+  <title>منصة مستويات الطلاب | عرض تجريبي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./public/css/styles.css" />
+  <style>
+    .demo-note {
+      margin: 0 0 20px;
+      padding: 10px 12px;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      background: #fffbeb;
+      color: #92400e;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .demo-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .demo-nav a {
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .demo-nav a:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .demo-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .demo-table th,
+    .demo-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+    }
+
+    .demo-table th {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .demo-footer {
+      padding: 20px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .auth-card {
+        padding: 24px;
+      }
+
+      .demo-table th,
+      .demo-table td {
+        padding: 9px 6px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <main class="auth-card" id="login-view">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">🎓</span>
+      <div>
+        <h1>منصة مستويات الطلاب</h1>
+        <p>استكشف المنصة في عرض تجريبي</p>
+      </div>
+    </div>
+
+    <p class="demo-note">نسخة للعرض فقط — لا تستخدم بيانات حقيقية. تسجيل الدخول هنا تجريبي.</p>
+
+    <form id="demo-login">
+      <label class="field">
+        <span>اسم المستخدم</span>
+        <input name="username" autocomplete="username" placeholder="مثال: student1" required />
+      </label>
+
+      <label class="field">
+        <span>كلمة المرور</span>
+        <input name="password" type="password" autocomplete="current-password" placeholder="••••••" required />
+      </label>
+
+      <p class="form-error" id="login-error" role="alert"></p>
+      <button class="btn btn-primary btn-block" type="submit">دخول تجريبي</button>
+    </form>
+
+    <p class="hint">يمكنك إدخال أي اسم وكلمة مرور لعرض شكل لوحة الطالب.</p>
+  </main>
+
+  <div id="demo-app" hidden>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand-mini">
+          <span class="brand-icon" aria-hidden="true">🎓</span>
+          <span>منصة المستويات</span>
+          <span class="badge">عرض تجريبي</span>
+        </div>
+        <div class="topbar-actions">
+          <div class="user-chip">
+            <span class="avatar">م</span>
+            <div class="user-meta">
+              <strong>محمد أحمد</strong>
+              <span>@student1</span>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="logout" type="button">خروج</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <p class="demo-note">عرض توضيحي ببيانات افتراضية — التعديلات لا تُحفظ ولا يوجد تسجيل دخول حقيقي.</p>
+
+      <nav class="demo-nav" aria-label="التنقل داخل العرض">
+        <a href="#overview">نظرة عامة</a>
+        <a href="#lessons">الدروس</a>
+        <a href="#grades">الدرجات</a>
+      </nav>
+
+      <section class="card hero" id="overview">
+        <span class="badge">مستواك الحالي</span>
+        <h2>المستوى الأول</h2>
+        <p>ابدأ رحلتك التعليمية وتابع تقدمك في الدروس.</p>
+        <div class="stat-row">
+          <div class="stat"><strong id="total-lessons">4</strong><span>إجمالي الدروس</span></div>
+          <div class="stat"><strong id="completed-lessons">1</strong><span>دروس خلّصتها</span></div>
+          <div class="stat"><strong id="progress-value">25%</strong><span>نسبة التقدم</span></div>
+        </div>
+        <div class="progress-track" aria-label="نسبة التقدم">
+          <div class="progress-fill" id="progress-fill" style="width: 25%"></div>
+        </div>
+      </section>
+
+      <section class="card" id="lessons">
+        <div class="card-title">
+          <h3>دروس المستوى</h3>
+          <span class="badge" id="lesson-count">1 من 4 مكتمل</span>
+        </div>
+        <div class="lesson-list">
+          <div class="lesson-row completed">
+            <button class="lesson-item" type="button" data-lesson="مقدمة في أساسيات التعلم">
+              <span class="lesson-index">1</span>
+              <span class="lesson-text"><strong>مقدمة في أساسيات التعلم</strong><small>تعرف على محتوى المستوى وخطة الدراسة.</small></span>
+              <span class="chevron">‹</span>
+            </button>
+            <button class="complete-btn done" type="button" aria-label="إلغاء إنجاز الدرس" aria-pressed="true">✓</button>
+          </div>
+          <div class="lesson-row">
+            <button class="lesson-item" type="button" data-lesson="مهارات الدراسة الفعّالة">
+              <span class="lesson-index">2</span>
+              <span class="lesson-text"><strong>مهارات الدراسة الفعّالة</strong><small>نظّم وقتك وابدأ بخطة بسيطة.</small></span>
+              <span class="chevron">‹</span>
+            </button>
+            <button class="complete-btn" type="button" aria-label="علّم الدرس كمكتمل" aria-pressed="false">○</button>
+          </div>
+          <div class="lesson-row">
+            <button class="lesson-item" type="button" data-lesson="مصادر المعرفة">
+              <span class="lesson-index">3</span>
+              <span class="lesson-text"><strong>مصادر المعرفة</strong><small>طرق البحث واختيار المصادر المناسبة.</small></span>
+              <span class="chevron">‹</span>
+            </button>
+            <button class="complete-btn" type="button" aria-label="علّم الدرس كمكتمل" aria-pressed="false">○</button>
+          </div>
+          <div class="lesson-row">
+            <button class="lesson-item" type="button" data-lesson="مراجعة المستوى الأول">
+              <span class="lesson-index">4</span>
+              <span class="lesson-text"><strong>مراجعة المستوى الأول</strong><small>راجع ما تعلمته واستعد للتقييم.</small></span>
+              <span class="chevron">‹</span>
+            </button>
+            <button class="complete-btn" type="button" aria-label="علّم الدرس كمكتمل" aria-pressed="false">○</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="grades">
+        <div class="card-title">
+          <h3>درجاتي</h3>
+          <span class="badge badge-success">المتوسط: ٨٨٪</span>
+        </div>
+        <div class="table-wrap">
+          <table class="demo-table">
+            <thead><tr><th>التقييم</th><th>الدرجة</th><th>الحالة</th></tr></thead>
+            <tbody>
+              <tr><td>اختبار أساسيات التعلم</td><td>٤٤ / ٥٠</td><td><span class="badge badge-success">مكتمل</span></td></tr>
+              <tr><td>تقييم المهارات</td><td>٣٢ / ٤٠</td><td><span class="badge badge-success">مكتمل</span></td></tr>
+              <tr><td>التقييم النهائي</td><td>—</td><td><span class="badge badge-muted">لم يبدأ</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="demo-footer">منصة مستويات الطلاب · واجهة تجريبية لا تحفظ البيانات</footer>
+    </main>
+  </div>
+
+  <dialog id="lesson-dialog">
+    <div class="dialog-head">
+      <h3 id="dialog-title">الدرس</h3>
+      <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+    </div>
+    <div class="dialog-body"><p>هذا محتوى تجريبي لمعاينة شكل الدروس داخل المنصة.</p></div>
+    <div class="dialog-foot"><button class="btn btn-ghost" type="button" data-close>إغلاق</button></div>
+  </dialog>
+
+  <script>
+    const loginView = document.querySelector('#login-view');
+    const demoApp = document.querySelector('#demo-app');
+    const loginForm = document.querySelector('#demo-login');
+    const dialog = document.querySelector('#lesson-dialog');
+    const lessonButtons = [...document.querySelectorAll('.complete-btn')];
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!loginForm.reportValidity()) return;
+      loginView.hidden = true;
+      document.body.classList.remove('auth-page');
+      demoApp.hidden = false;
+      window.scrollTo(0, 0);
+    });
+
+    document.querySelector('#logout').addEventListener('click', () => {
+      demoApp.hidden = true;
+      loginView.hidden = false;
+      loginForm.reset();
+      document.body.classList.add('auth-page');
+      window.scrollTo(0, 0);
+    });
+
+    for (const button of lessonButtons) {
+      button.addEventListener('click', () => {
+        const done = button.getAttribute('aria-pressed') !== 'true';
+        button.setAttribute('aria-pressed', String(done));
+        button.setAttribute('aria-label', done ? 'إلغاء إنجاز الدرس' : 'علّم الدرس كمكتمل');
+        button.textContent = done ? '✓' : '○';
+        button.classList.toggle('done', done);
+        button.closest('.lesson-row').classList.toggle('completed', done);
+
+        const completed = lessonButtons.filter((item) => item.getAttribute('aria-pressed') === 'true').length;
+        const percent = Math.round((completed / lessonButtons.length) * 100);
+        document.querySelector('#completed-lessons').textContent = completed;
+        document.querySelector('#progress-value').textContent = `${percent}%`;
+        document.querySelector('#progress-fill').style.width = `${percent}%`;
+        document.querySelector('#lesson-count').textContent = `${completed} من ${lessonButtons.length} مكتمل`;
+      });
+    }
+
+    for (const button of document.querySelectorAll('.lesson-item')) {
+      button.addEventListener('click', () => {
+        document.querySelector('#dialog-title').textContent = button.dataset.lesson;
+        dialog.showModal();
+      });
+    }
+
+    for (const button of document.querySelectorAll('[data-close]')) {
+      button.addEventListener('click', () => dialog.close());
+    }
+  </script>
+</body>
+</html>
