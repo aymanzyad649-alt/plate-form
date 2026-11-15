@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4f46e5" />
+  <title>لوحة المدير | منصة المستويات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-mini">
+        <span class="brand-icon" aria-hidden="true">🎓</span>
+        <span class="brand-text">منصة المستويات</span>
+        <span class="badge badge-warning">مدير</span>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="user-chip">
+          <span class="avatar" id="avatar">؟</span>
+          <div class="user-meta">
+            <strong id="user-name">…</strong>
+            <span id="user-username">…</span>
+          </div>
+        </div>
+        <a class="btn btn-ghost btn-sm" href="/dashboard">حسابي</a>
+        <button class="btn btn-ghost btn-sm" id="logout-btn" type="button">خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <h2>لوحة المدير</h2>
+        <p>اعمل حسابات الطلاب، وحدد مستواهم، وأضف الدروس والدرجات والمحاضرات.</p>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="أقسام لوحة المدير">
+      <button class="tab active" type="button" data-tab="students" role="tab" aria-selected="true">الطلاب</button>
+      <button class="tab" type="button" data-tab="levels" role="tab" aria-selected="false">المستويات</button>
+      <button class="tab" type="button" data-tab="lessons" role="tab" aria-selected="false">الدروس</button>
+      <button class="tab" type="button" data-tab="sheet" role="tab" aria-selected="false">شيت الدرجات</button>
+    </div>
+
+    <section class="panel" id="panel-students" aria-label="الطلاب">
+      <div class="card">
+        <div class="card-title">
+          <h3>الطلاب</h3>
+          <div class="toolbar">
+            <input id="student-search" type="search" placeholder="ابحث بالاسم أو اليوزر…" aria-label="بحث في الطلاب" />
+            <button class="btn btn-primary" type="button" id="add-student-btn">+ طالب جديد</button>
+          </div>
+        </div>
+        <div id="students-box" class="loading">بنحمّل الطلاب…</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-levels" aria-label="المستويات" hidden>
+      <div class="card">
+        <div class="card-title">
+          <h3>المستويات</h3>
+          <button class="btn btn-primary" type="button" id="add-level-btn">+ مستوى جديد</button>
+        </div>
+        <div id="levels-box" class="loading">بنحمّل المستويات…</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-lessons" aria-label="الدروس" hidden>
+      <div class="card">
+        <div class="card-title">
+          <h3>إدارة الدروس</h3>
+          <div class="toolbar">
+            <select id="lessons-level-filter" aria-label="فلترة الدروس بالمستوى"></select>
+            <button class="btn btn-primary" type="button" id="add-lesson-btn">+ درس جديد</button>
+          </div>
+        </div>
+        <div id="lessons-admin-box" class="loading">بنحمّل الدروس…</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-sheet" aria-label="شيت الدرجات" hidden>
+      <div class="card">
+        <div class="card-title">
+          <h3>شيت الدرجات الإلكتروني</h3>
+          <div class="toolbar">
+            <select id="sheet-level-select" aria-label="اختيار المستوى"></select>
+            <button class="btn btn-ghost" type="button" id="sheet-refresh-btn">تحديث</button>
+            <button class="btn btn-ghost" type="button" id="sheet-export-btn">تصدير Excel</button>
+            <button class="btn btn-primary" type="button" id="sheet-save-btn">حفظ الكل</button>
+          </div>
+        </div>
+        <p class="muted small" id="sheet-hint"></p>
+        <div id="sheet-box" class="loading">اختار مستوى لعرض الشيت…</div>
+        <p class="form-error" id="sheet-error" role="alert"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- نافذة الطالب -->
+  <dialog id="student-dialog">
+    <form id="student-form" novalidate>
+      <div class="dialog-head">
+        <h3 id="student-dialog-title">طالب جديد</h3>
+        <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+      </div>
+
+      <div class="dialog-body">
+        <input type="hidden" name="record_id" />
+
+        <label class="field">
+          <span>اسم الطالب</span>
+          <input name="display_name" required maxlength="60" placeholder="مثال: أحمد محمد" />
+        </label>
+
+        <label class="field">
+          <span>اسم المستخدم (اليوزر)</span>
+          <input name="username" required maxlength="32" dir="ltr" placeholder="ahmed1" />
+          <small>حروف/أرقام/ . _ - بدون مسافات، من 3 لـ 32 حرف</small>
+        </label>
+
+        <label class="field">
+          <span>الباسورد</span>
+          <input name="password" type="password" autocomplete="new-password" minlength="6" placeholder="••••••" />
+          <small id="password-hint">6 حروف على الأقل</small>
+        </label>
+
+        <label class="field">
+          <span>المستوى</span>
+          <select name="level_id" id="student-level-select">
+            <option value="">بدون مستوى</option>
+          </select>
+        </label>
+
+        <label class="checkbox" id="student-active-wrap">
+          <input type="checkbox" name="is_active" checked />
+          الحساب مفعّل (الطالب يقدر يدخل)
+        </label>
+
+        <p class="form-error" id="student-error" role="alert"></p>
+      </div>
+
+      <div class="dialog-foot">
+        <button class="btn btn-primary" type="submit">حفظ</button>
+        <button class="btn btn-ghost" type="button" data-close>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- نافذة المستوى -->
+  <dialog id="level-dialog">
+    <form id="level-form" novalidate>
+      <div class="dialog-head">
+        <h3 id="level-dialog-title">مستوى جديد</h3>
+        <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+      </div>
+
+      <div class="dialog-body">
+        <input type="hidden" name="record_id" />
+
+        <label class="field">
+          <span>اسم المستوى</span>
+          <input name="name" required maxlength="80" placeholder="مثال: المستوى الثالث" />
+        </label>
+
+        <label class="field">
+          <span>الوصف</span>
+          <textarea name="description" maxlength="500" placeholder="وصف قصير للمستوى"></textarea>
+        </label>
+
+        <label class="field">
+          <span>الترتيب</span>
+          <input name="sort_order" type="number" min="0" max="9999" value="0" />
+        </label>
+
+        <p class="form-error" id="level-error" role="alert"></p>
+      </div>
+
+      <div class="dialog-foot">
+        <button class="btn btn-primary" type="submit">حفظ</button>
+        <button class="btn btn-ghost" type="button" data-close>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- نافذة الدرس -->
+  <dialog id="lesson-form-dialog">
+    <form id="lesson-form" novalidate>
+      <div class="dialog-head">
+        <h3 id="lesson-dialog-title">درس جديد</h3>
+        <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+      </div>
+
+      <div class="dialog-body">
+        <input type="hidden" name="record_id" />
+
+        <label class="field">
+          <span>المستوى</span>
+          <select name="level_id" id="lesson-level-select" required></select>
+        </label>
+
+        <label class="field">
+          <span>عنوان الدرس</span>
+          <input name="title" required maxlength="120" />
+        </label>
+
+        <label class="field">
+          <span>محتوى الدرس</span>
+          <textarea name="content" maxlength="20000" placeholder="اكتب شرح الدرس هنا…"></textarea>
+        </label>
+
+        <label class="field">
+          <span>رابط فيديو (اختياري)</span>
+          <input name="video_url" type="url" dir="ltr" maxlength="500" placeholder="https://…" />
+        </label>
+
+        <label class="field">
+          <span>الترتيب</span>
+          <input name="sort_order" type="number" min="0" max="9999" value="0" />
+        </label>
+
+        <p class="form-error" id="lesson-error" role="alert"></p>
+      </div>
+
+      <div class="dialog-foot">
+        <button class="btn btn-primary" type="submit">حفظ</button>
+        <button class="btn btn-ghost" type="button" data-close>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- نافذة التقييم -->
+  <dialog id="assessment-dialog">
+    <form id="assessment-form" novalidate>
+      <div class="dialog-head">
+        <h3 id="assessment-dialog-title">تقييم جديد</h3>
+        <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+      </div>
+
+      <div class="dialog-body">
+        <input type="hidden" name="record_id" />
+        <input type="hidden" name="level_id" />
+
+        <label class="field">
+          <span>عنوان التقييم</span>
+          <input name="title" required maxlength="120" placeholder="مثال: امتحان الشهر الأول" />
+        </label>
+
+        <label class="field">
+          <span>الدرجة النهائية</span>
+          <input name="max_score" type="number" min="0.5" max="10000" step="0.5" value="100" required />
+        </label>
+
+        <label class="field">
+          <span>الترتيب</span>
+          <input name="sort_order" type="number" min="0" max="9999" value="0" />
+        </label>
+
+        <p class="form-error" id="assessment-error" role="alert"></p>
+      </div>
+
+      <div class="dialog-foot">
+        <button class="btn btn-primary" type="submit">حفظ</button>
+        <button class="btn btn-ghost" type="button" data-close>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- نافذة درجات طالب -->
+  <dialog id="grades-dialog">
+    <div class="dialog-head">
+      <h3 id="grades-dialog-title">درجات الطالب</h3>
+      <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+    </div>
+
+    <div class="dialog-body">
+      <p class="muted small" id="grades-hint"></p>
+      <div id="grades-form-box"></div>
+      <p class="form-error" id="grades-error" role="alert"></p>
+    </div>
+
+    <div class="dialog-foot">
+      <button class="btn btn-primary" type="button" id="save-grades-btn">حفظ الدرجات</button>
+      <button class="btn btn-ghost" type="button" data-close>إغلاق</button>
+    </div>
+  </dialog>
+
+  <!-- نافذة مرفقات الدرس -->
+  <dialog id="files-dialog">
+    <div class="dialog-head">
+      <h3 id="files-dialog-title">مرفقات الدرس</h3>
+      <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+    </div>
+
+    <div class="dialog-body">
+      <form id="upload-form" class="upload-form" novalidate>
+        <input
+          type="file"
+          name="file"
+          id="upload-input"
+          accept=".pdf,.doc,.docx,.rtf,.odt,.ppt,.pptx,.odp,.xls,.xlsx,.ods,.csv,.txt,.md,.zip,.rar,.7z,.png,.jpg,.jpeg,.gif,.webp,.mp3,.wav,.m4a,.ogg,.mp4,.webm,.mov,.mkv"
+          required
+        />
+        <button class="btn btn-primary btn-sm" type="submit" id="upload-btn">رفع الملف</button>
+      </form>
+
+      <p class="muted small">
+        الحد الأقصى 50 ميجا. المسموح: PDF، Word، PowerPoint، Excel، صور، فيديو، صوت، وملفات ZIP.
+      </p>
+
+      <p class="form-error" id="upload-error" role="alert"></p>
+      <div id="files-list-box"></div>
+    </div>
+
+    <div class="dialog-foot">
+      <button class="btn btn-ghost" type="button" data-close>إغلاق</button>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="/js/cache.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

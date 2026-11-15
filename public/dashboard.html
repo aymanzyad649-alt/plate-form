@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4f46e5" />
+  <title>لوحة الطالب | منصة المستويات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-mini">
+        <span class="brand-icon" aria-hidden="true">🎓</span>
+        <span class="brand-text">منصة المستويات</span>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="user-chip">
+          <span class="avatar" id="avatar">؟</span>
+          <div class="user-meta">
+            <strong id="user-name">…</strong>
+            <span id="user-username">…</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="logout-btn" type="button">خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card hero" id="hero" aria-live="polite">
+      <div class="loading">بنحمّل بياناتك…</div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">
+        <h3>دروس المستوى</h3>
+        <span class="badge" id="lessons-count"></span>
+      </div>
+      <div id="lessons-box" class="loading">…</div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">
+        <h3>درجاتي</h3>
+        <span class="badge" id="grades-summary"></span>
+      </div>
+      <div id="grades-box" class="loading">…</div>
+    </section>
+
+    <div class="grid-2">
+      <section class="card">
+        <div class="card-title">
+          <h3>بيانات الحساب</h3>
+        </div>
+        <form id="profile-form" novalidate>
+          <label class="field">
+            <span>الاسم الظاهر</span>
+            <input name="display_name" required maxlength="60" />
+          </label>
+
+          <label class="field">
+            <span>اسم المستخدم</span>
+            <input name="username" required maxlength="32" dir="ltr" />
+            <small>حروف/أرقام/ . _ - بدون مسافات</small>
+          </label>
+
+          <label class="field">
+            <span>الباسورد الحالي</span>
+            <input name="currentPassword" type="password" autocomplete="current-password" />
+            <small>مطلوب بس لو بتغيّر اسم المستخدم</small>
+          </label>
+
+          <p class="form-error" id="profile-error" role="alert"></p>
+          <button class="btn btn-primary" type="submit">حفظ التعديلات</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-title">
+          <h3>تغيير الباسورد</h3>
+        </div>
+        <form id="password-form" novalidate>
+          <label class="field">
+            <span>الباسورد الحالي</span>
+            <input name="currentPassword" type="password" autocomplete="current-password" required />
+          </label>
+
+          <label class="field">
+            <span>الباسورد الجديد</span>
+            <input name="newPassword" type="password" autocomplete="new-password" required minlength="6" />
+            <small>6 حروف على الأقل</small>
+          </label>
+
+          <label class="field">
+            <span>تأكيد الباسورد الجديد</span>
+            <input name="confirmPassword" type="password" autocomplete="new-password" required minlength="6" />
+          </label>
+
+          <p class="form-error" id="password-error" role="alert"></p>
+          <button class="btn btn-primary" type="submit">تغيير الباسورد</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="lesson-dialog">
+    <div class="dialog-head">
+      <h3 id="lesson-dialog-title">الدرس</h3>
+      <button class="icon-btn" type="button" data-close aria-label="إغلاق">✕</button>
+    </div>
+    <div class="dialog-body">
+      <div class="lesson-body" id="lesson-dialog-body"></div>
+      <a class="video-link" id="lesson-video" href="#" target="_blank" rel="noopener" hidden>
+        ▶ شاهد فيديو الدرس
+      </a>
+      <div class="lesson-files" id="lesson-files" hidden></div>
+    </div>
+    <div class="dialog-foot">
+      <button class="btn btn-ghost" type="button" data-close>تمام، قفل</button>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="/js/cache.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
